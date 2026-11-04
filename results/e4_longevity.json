@@ -1,0 +1,7 @@
+{
+ "implementations": "tools/mini_reader.py written from SPEC.md only",
+ "clean_ledger_mini_ok": true,
+ "cases_compared": 115,
+ "agreements": 115,
+ "agreement_rate": 1.0
+}

@@ -1,0 +1,861 @@
+{
+ "seed": 20261103,
+ "total_cases": 115,
+ "per_class": {
+  "alter_action": {
+   "cases": 20,
+   "detected": 20,
+   "missed": 0,
+   "detection_rate": 1.0
+  },
+  "delete_record": {
+   "cases": 20,
+   "detected": 20,
+   "missed": 0,
+   "detection_rate": 1.0
+  },
+  "reorder_records": {
+   "cases": 20,
+   "detected": 20,
+   "missed": 0,
+   "detection_rate": 1.0
+  },
+  "alter_consequence": {
+   "cases": 20,
+   "detected": 20,
+   "missed": 0,
+   "detection_rate": 1.0
+  },
+  "forge_context": {
+   "cases": 20,
+   "detected": 20,
+   "missed": 0,
+   "detection_rate": 1.0
+  },
+  "truncate_tail_trailer_kept": {
+   "cases": 5,
+   "detected": 5,
+   "missed": 0,
+   "detection_rate": 1.0
+  },
+  "truncate_tail_and_trailer": {
+   "cases": 5,
+   "detected": 5,
+   "missed": 0,
+   "detection_rate": 1.0
+  },
+  "truncate_and_reforge_trailer": {
+   "cases": 5,
+   "detected": 0,
+   "missed": 5,
+   "detection_rate": 0.0
+  }
+ },
+ "detail": [
+  {
+   "case": 0,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 1,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 2,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 3,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 4,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 5,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 6,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 7,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 8,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 9,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 10,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 11,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 12,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 13,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 14,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 15,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 16,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 17,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 18,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 19,
+   "class": "alter_action",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 20,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 21,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 22,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 23,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 24,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 25,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 26,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 27,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 28,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 29,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 30,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 31,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 32,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 33,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 34,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 35,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 36,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 37,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 38,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 39,
+   "class": "delete_record",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 40,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 41,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 42,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 43,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 44,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 45,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 46,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 47,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 48,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 49,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 50,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 51,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 52,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 53,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 54,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 55,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 56,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 57,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 58,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 59,
+   "class": "reorder_records",
+   "detected": true,
+   "failed_check": "seq",
+   "mini_agrees": true
+  },
+  {
+   "case": 60,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 61,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 62,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 63,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 64,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 65,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 66,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 67,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 68,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 69,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 70,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 71,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 72,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 73,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 74,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 75,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 76,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 77,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 78,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 79,
+   "class": "alter_consequence",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 80,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 81,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 82,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 83,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 84,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 85,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 86,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 87,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 88,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 89,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 90,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 91,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 92,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 93,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 94,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 95,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 96,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 97,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 98,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 99,
+   "class": "forge_context",
+   "detected": true,
+   "failed_check": "record_hash",
+   "mini_agrees": true
+  },
+  {
+   "case": 100,
+   "class": "truncate_tail_trailer_kept",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 101,
+   "class": "truncate_tail_trailer_kept",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 102,
+   "class": "truncate_tail_trailer_kept",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 103,
+   "class": "truncate_tail_trailer_kept",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 104,
+   "class": "truncate_tail_trailer_kept",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 105,
+   "class": "truncate_tail_and_trailer",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 106,
+   "class": "truncate_tail_and_trailer",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 107,
+   "class": "truncate_tail_and_trailer",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 108,
+   "class": "truncate_tail_and_trailer",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 109,
+   "class": "truncate_tail_and_trailer",
+   "detected": true,
+   "failed_check": "trailer_count",
+   "mini_agrees": true
+  },
+  {
+   "case": 110,
+   "class": "truncate_and_reforge_trailer",
+   "detected": false,
+   "failed_check": null,
+   "mini_agrees": true
+  },
+  {
+   "case": 111,
+   "class": "truncate_and_reforge_trailer",
+   "detected": false,
+   "failed_check": null,
+   "mini_agrees": true
+  },
+  {
+   "case": 112,
+   "class": "truncate_and_reforge_trailer",
+   "detected": false,
+   "failed_check": null,
+   "mini_agrees": true
+  },
+  {
+   "case": 113,
+   "class": "truncate_and_reforge_trailer",
+   "detected": false,
+   "failed_check": null,
+   "mini_agrees": true
+  },
+  {
+   "case": 114,
+   "class": "truncate_and_reforge_trailer",
+   "detected": false,
+   "failed_check": null,
+   "mini_agrees": true
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "executed_records": 9294,
+ "scored": 8742,
+ "matched": 5569,
+ "overall_match_rate": 0.637,
+ "no_sensor_signature_excluded": 186,
+ "absence_signature_groups": {
+  "camera_livingroom (no living-zone motion, following 10 min)": {
+   "checked": 366,
+   "window_empty_of_living_motion": 366,
+   "resident_away": 366
+  }
+ },
+ "groups": {
+  "front_door (any door-sensor event, following 10 min)": {
+   "checked": 2834,
+   "matched": 539,
+   "matched_preceding": 835,
+   "matched_symmetric": 1130,
+   "match_rate": 0.1902,
+   "match_rate_preceding": 0.2946,
+   "match_rate_symmetric": 0.3987
+  },
+  "tap_kitchen onset (kitchen motion, following 10 min)": {
+   "checked": 1527,
+   "matched": 1119,
+   "match_rate": 0.7328
+  },
+  "tap_kitchen cessation (kitchen motion, preceding 10 min)": {
+   "checked": 1308,
+   "matched": 1047,
+   "match_rate": 0.8005
+  },
+  "med_reminder (any sensor event, following 10 min)": {
+   "checked": 1549,
+   "matched": 1461,
+   "match_rate": 0.9432
+  },
+  "burner onset (kitchen motion, following 10 min)": {
+   "checked": 1089,
+   "matched": 1089,
+   "match_rate": 1.0
+  },
+  "burner cessation (kitchen motion, preceding 10 min)": {
+   "checked": 435,
+   "matched": 314,
+   "match_rate": 0.7218
+  }
+ },
+ "kitchen_zone": [
+  "M014",
+  "M015",
+  "M016",
+  "M017",
+  "M018",
+  "M019",
+  "M020",
+  "M024"
+ ],
+ "living_zone": [
+  "M009",
+  "M010",
+  "M012",
+  "M013",
+  "M014",
+  "M019",
+  "M020",
+  "M024"
+ ]
+}

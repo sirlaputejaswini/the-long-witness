@@ -1,0 +1,9 @@
+{
+ "records": 10048,
+ "build_seconds": 18.244,
+ "ledger_bytes": 8384617,
+ "source_decision_log_bytes": 2199642,
+ "overhead_pct": 281.18,
+ "bytes_per_record": 834.5,
+ "trace_events": 1719558
+}

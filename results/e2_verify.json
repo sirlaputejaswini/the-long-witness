@@ -1,0 +1,10 @@
+{
+ "verdict": {
+  "ok": true,
+  "records": 10048,
+  "seconds": 19.325
+ },
+ "wall_seconds": 19.499,
+ "verify_seconds_reported": 19.325,
+ "per_10000_records_seconds": 19.233
+}
