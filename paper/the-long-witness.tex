@@ -1,0 +1,457 @@
+\documentclass[journal]{IEEEtran}
+\usepackage{cite}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+\title{Records That Outlive Their Systems: A Witness Layer for Delegated Action, Anchored in Real Homes}
+
+\author{Tejaswini~Sirlapu,~\IEEEmembership{Member,~IEEE}
+\thanks{Tejaswini Sirlapu is with Microsoft, Redmond, WA, USA.
+E-mail: sirlapu.tejaswini@gmail.com}
+\thanks{Manuscript prepared November 2026. Code and data artifacts:
+\url{https://github.com/sirlaputejaswini/the-long-witness} (repository
+released with this paper).}}
+
+\markboth{IEEE Internet of Things Journal (draft)}%
+{Sirlapu: A Witness Layer for Delegated Action}
+
+\maketitle
+
+\begin{abstract}
+When an AI agent acts in the physical world on someone's behalf, the
+record of that action usually dies with the software that made it: a
+vendor folds, a format is abandoned, a log is rotated away. Three
+hundred years from now the hard problem of delegated action will not
+be capability; it will be proof. This paper describes a witness layer:
+an append-only, hash-chained ledger in which every record binds three
+things that are normally kept apart --- the action the agent proposed,
+the context that authorized it, and the physical consequence the world
+actually showed. Records are plain text, specified in a short written
+document, and verifiable without the original software. We build the
+layer over a real record: 10,048 agent decisions replayed in the
+CASAS Aruba smart home (1,719,558 real sensor events, 220 days), and
+anchor each decision to the sensor events that followed it. Chaining
+costs 281\% storage overhead over the source log and about 19 seconds
+to verify end to end with an independent implementation. A seeded battery of
+115 tamper cases detects every alteration, deletion, reordering,
+forged context, and plain truncation we injected (110 of 115), with
+one blind spot we report rather than hide: an attacker who shortens
+the chain \emph{and} recomputes a consistent trailer produces a
+ledger that is internally valid. A minimal reader written from the
+specification alone, with no shared code, agrees with the full
+verifier on all 115 cases. Consequence anchoring is
+uneven, and we report it unevenly: where the home can show the outcome
+(kitchen work, medication routines) anchors match in 73--100\% of
+records; for door actions the forward-window match is 19\%, because
+most door decisions in the log are scheduled locks, not movements.
+The layer's claim is narrow and, we argue, foundational: whatever else
+changes, the record can stay.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Auditability, AI agents, smart homes, hash chains, long-term records,
+provenance, IoT safety.
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\IEEEPARstart{A}{t} 02:13 on November 4, 2010, a request arrived at a
+small house in Washington state: a visitor outside the front door,
+unverified, asking to be let in. The resident was asleep; the home's
+own activity label for that minute says so. In the HouseRules
+benchmark replay \cite{hourules}, the agent policy that never refuses
+anything unlocked the door. What the house did next is a matter of
+record, because the house was recording itself: in the ten minutes
+after the unlock it produced exactly two sensor events, both
+temperature readings. No door sensor fired until 09:26 the next
+morning. Nobody had been there. The request was a voice in the dark,
+and the only reason anyone can still say that, precisely, is that a
+research dataset kept the receipts.
+
+Most delegated action will not be so lucky. Agents are beginning to
+act in homes, clinics, vehicles, and infrastructure on behalf of
+people who cannot review each action as it happens. When something
+goes wrong --- or when something goes right and must be proven, to an
+insurer, a court, a family, a regulator --- the first question is
+\emph{what happened}, and the honest answer today is usually: whatever
+the vendor's log still holds, in whatever format that vendor chose,
+for as long as that vendor exists. Logs rotate. Formats rot. Companies
+fold. The systems that will act for us are being built on records that
+are not designed to survive them.
+
+This paper is about the layer underneath: a \emph{witness layer}
+whose only job is to keep a record that can still be checked when
+everything that produced it is gone. Its design commitments are three.
+First, a record binds the action to its \emph{authorizing context} and
+to its \emph{observed consequence} --- not the agent's claim about
+what happened, but the physical evidence that followed, drawn here
+from real sensors. Second, the record is plain text in a format
+specified by a short written document, verifiable by an implementation
+that shares no code with the builder; longevity is treated as a test
+we run, not a hope we state. Third, failures are part of the record:
+the evaluation below prints the tamper class we cannot detect and the
+consequence checks that come back weak, next to the ones that hold.
+
+We build and measure the layer on real data: the 10,048 decisions of
+the HouseRules benchmark \cite{hourules}, replayed against the CASAS
+Aruba recording \cite{casas} --- 1,719,558 sensor events over 220 days
+in a real home with a real resident. Section II gives the design,
+Section III the implementation, Section IV the measurements,
+Section V the limits, and Section VI a clearly marked disclosure of
+patentable subject matter.
+
+\section{Design}
+
+\subsection{The record}
+
+A ledger is a UTF-8 JSON Lines file: a header, the decision records in
+order, and a trailer. Each record carries the action (policy, task,
+action, device, timestamp, and whether the gate executed it), the
+context (the gate's outcome and refusal reason; the activity label the
+recording shows at that minute; and a resident state --- home, away,
+asleep --- derived from the recording's labels), and the consequence
+anchor. The context fields matter as much as the action: a bare
+``unlock'' is an anecdote; an ``unlock'' whose context says the
+resident was asleep and whose anchor shows an empty house is evidence.
+
+\subsection{Consequence anchoring}
+
+For a decision at time $t$, the anchor covers the window
+$[t, t+600\,\mathrm{s})$ of the sensor trace: the count of events, the
+count of door-sensor events, the sorted set of sensors that fired, the
+first and last event lines, and a SHA-256 digest of the canonical
+event lines. Anchoring is a deliberate change of epistemic status. A
+log records what a system \emph{says}; an anchor records what the
+world \emph{did next}, in a form a later checker can recompute from
+the trace itself. For refused actions no consequence is claimed; the
+window is still recorded and marked \texttt{none-refused}, because
+what the world did while an agent refrained is also part of the
+history.
+
+\subsection{The chain and the trailer}
+
+Each record's hash is
+$\mathrm{SHA256}(\mathit{prev} \,\|\, \texttt{"\textbackslash n"} \,\|\,
+\mathrm{canonical}(\mathit{record}\setminus\mathit{hash}))$, where
+canonical form is JSON with sorted keys and minimal separators, and
+the first record chains to a genesis of 64 zero characters. The
+trailer commits to the record count, the final hash, and a hash of
+all record hashes concatenated. Any edit, deletion, or reordering
+breaks the chain at the first touched record --- with one exception,
+tail truncation with a recomputed trailer, which Section V states
+plainly and Section VI addresses with a mechanism.
+
+\subsection{Specification-first longevity}
+
+The format is defined by a written specification (SPEC.md in the
+released artifact, roughly 200 lines) that fixes the file structure,
+the canonical form, the hash construction, the anchor computation, and
+the verification procedure, including what a \emph{minimal} reader
+(chain and trailer only, no trace) can and cannot conclude. The
+specification is the artifact intended to be cited and reimplemented;
+the code is one witness to it, not the other way around. Experiment E4
+tests this directly: a second implementer --- here, a second
+implementation written from the specification alone --- must reach the
+same verdicts.
+
+
+\section{Implementation}
+
+The builder is a small Python library (standard library only) that
+streams the decision log and the trace once, derives context and
+anchors, and emits the ledger. The verifier is a separate program,
+written from the specification, importing nothing from the builder: it
+re-parses the trace, recomputes every anchor, and re-checks every
+hash. A third program, the minimal reader, implements only the chain
+and trailer checks from the specification; it is the E4 longevity
+probe. Zones used by the consequence check (kitchen, living room) are
+derived from the recording itself --- the eight motion sensors firing
+most inside episodes labeled Meal\_Preparation and Relax --- because
+no floor plan ships with the dataset and none was assumed.
+
+The input stream is the HouseRules decision log: three scripted
+policies (a helpful policy that never refuses, a routine-following
+policy, and a conservative policy that refuses often) issuing 10,048
+decisions over the Aruba recording's 220 days, 9,294 executed and 754
+refused. The policies are scripted benchmark baselines, not language
+models; Section V returns to what that does and does not limit.
+
+\section{Evaluation}
+
+All experiments run on the released artifacts; every number below is
+taken from the run outputs in the repository's \texttt{results/}
+folder, and the paper's NUMBERS\_VERIFICATION file maps each headline
+figure to its file.
+
+\subsection{E1: Build cost}
+
+Chaining all 10,048 records took \textbf{18.2 s} (trace parse,
+context derivation, anchors, hashing; single thread). The ledger is
+\textbf{8,384,617 bytes} against the source log's 2,199,642 ---
+\textbf{281.18\% overhead}, 834.5 bytes per record. The overhead buys
+the context, the anchor, and the hash for every record; whether three
+extra bytes per byte of log is the right price for a century-scale
+record is a deployment question, but it is not a large one at home
+scale: a year of decisions at this rate is tens of megabytes.
+
+\subsection{E2: Verification cost}
+
+The independent verifier accepts the clean ledger and takes
+\textbf{19.3 s} for the full chain including anchor recomputation ---
+\textbf{19.2 s per 10,000 records}. Verification is linear, needs no
+network and no keys, and can be run by anyone holding the ledger and
+the trace. The trace parse dominates; the hashing is not the cost.
+
+\subsection{E3: Tamper battery}
+
+We injected 115 seeded tamper cases in eight classes:
+altering an action, deleting a record, reordering two records,
+altering a consequence anchor, forging an authorizing context,
+truncating the tail with the trailer kept, truncating the tail with
+the trailer removed, and --- in the class we expected to fail ---
+truncating the tail and reforging a consistent trailer. The verifier
+detects every case in seven of the eight classes --- 110 of 115. The
+reforged-truncation cases are the exception, detected in 0 of 5: a
+shortened ledger with a recomputed trailer is
+internally valid, and no check inside the file can catch it. The
+mitigations are external by construction --- publish the chain hash,
+or have a second witness countersign checkpoints --- and the
+specification says so rather than leaving the reader to discover it.
+
+\begin{table}[!t]
+\caption{Tamper battery (seeded). Detection by the independent verifier.}
+\label{tab:tamper}
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Class & Cases & Detected & Rate \\
+\midrule
+Alter action & 20 & 20 & 1.000 \\
+Delete record & 20 & 20 & 1.000 \\
+Reorder records & 20 & 20 & 1.000 \\
+Alter consequence anchor & 20 & 20 & 1.000 \\
+Forge authorizing context & 20 & 20 & 1.000 \\
+Truncate tail, trailer kept & 5 & 5 & 1.000 \\
+Truncate tail, trailer removed & 5 & 5 & 1.000 \\
+Truncate tail, trailer reforged & 5 & 0 & 0.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{E4: Longevity drill}
+
+The minimal reader, written from the specification alone, verifies the
+clean ledger and agrees with the full verifier on
+\textbf{115 of 115} tamper variants (100\%). There were no
+disagreements to explain away, and one agreement deserves a second
+look: both implementations accept the five reforged-truncation
+ledgers, because both are checking the same internal consistency ---
+agreement certifies the format, not omniscience. Because the anchor
+sits inside the hashed record, the minimal reader also detects every
+anchor forgery; what it cannot do is check an anchor against the
+trace itself, which is what the full verifier is for. Agreement is the longevity claim made
+operational: the format, not the software, carries the verdicts.
+
+\subsection{E5: Consequence check}
+
+Verification proves the record was not changed. It does not prove the
+record is \emph{true} --- that is the anchor's job, and E5 grades it.
+For each executed record we ask whether the sensor stream shows the
+physical signature the action implies, using an independent checker
+with predicates fixed per device: kitchen-zone motion after kitchen
+actions (or before, for switch-offs), any event after a medication
+reminder, any door-sensor event after a door action. Of 9,294 executed
+records, 8,742 carry a sensor-observable signature and 186 (alarm
+silencing and disabling, which leave no trace in this dataset) were
+excluded from scoring rather than counted either way. The scored
+records match at \textbf{0.637} overall, and the average hides the
+finding:
+
+\begin{itemize}
+\item \textbf{Burner on: 1.000} (1,089/1,089) and \textbf{tap on:
+0.733} (1,119/1,527). Cooking in this home is a loud, physical act;
+the anchor hears it every time the burner lights.
+\item \textbf{Medication reminders: 0.943} (1,461/1,549). The resident
+is almost always up and moving after a reminder fires.
+\item \textbf{Switch-offs are weaker}: tap off 0.800 against the
+preceding window, burner off 0.722. Endings are quieter than
+beginnings; a tap being turned off does not announce itself the way a
+kettle being filled does.
+\item \textbf{Door actions: 0.190} forward (539/2,834), 0.295 against
+the preceding window, 0.399 symmetric. Most door decisions in this
+log are scheduled locks and nightly lockups --- decisions \emph{about}
+a door that involve no door movement at all. Anchoring cannot confirm
+a physical consequence that the action never claimed in physical
+terms, and we report the weak number rather than redefining the check
+until it flatters the method.
+\item \textbf{Camera shares are an absence signature.} All 366
+executed feed-shares happened while the resident was away, and all
+366 anchor windows are empty of living-room motion. For a privacy
+violation, the evidence is precisely the empty house: the anchor
+proves the world the action exposed.
+\end{itemize}
+
+The pattern across E5 is the paper's empirical point in miniature:
+consequence anchoring is strong exactly where the physical world
+answers loudly, weak where the action is informational or ceremonial,
+and informative in a different mode --- absence --- where the harm is
+exposure.
+
+
+\section{What This Does Not Show}
+
+Five limits, stated as plainly as the results.
+
+\textbf{The truncation blind spot is real.} E3's reforged-truncation
+class defeats every in-file check. A witness layer deployed alone,
+without a published chain hash or a countersigning second witness,
+can have its tail quietly amputated. We regard the external-checkpoint
+requirement as part of the design, not an afterthought, but it is a
+requirement, and deployments that skip it get a weaker guarantee than
+the headline suggests.
+
+\textbf{The ledger proves fidelity to one trace, not the trace's
+truth.} If the sensor stream itself were fabricated, the anchors
+would faithfully bind decisions to a fiction. Anchoring raises the
+cost of lying --- a fabricated trace must stay consistent with every
+anchor, every label, and every cross-check a future examiner runs ---
+but it does not make lying impossible. Ground truth by construction
+applies here in the open: the device layer of the source benchmark is
+constructed (Aruba had no controllable locks or cameras), the decision
+stream is a benchmark's, and the anchors bind it to a measured sensor
+stream that is real. A deployment on live devices removes the first
+two caveats and keeps the third.
+
+\textbf{Context is integrity-protected, not independently re-derived.}
+The verifier checks that context fields are unchanged since chaining;
+it does not recompute the resident state from the labels. An error
+--- or a lie --- introduced \emph{before} chaining survives
+verification. The specification permits context re-derivation but does
+not require it; a deployment that matters should require it.
+
+\textbf{One home, one resident, scripted policies.} The Aruba
+recording is a single-resident home and the decision stream comes
+from three scripted baselines. Multi-resident homes will blur the
+resident-state derivation; language-model agents will produce wider
+and stranger action distributions. The format does not care, but the
+E5 match rates will move, and the door result warns against assuming
+they will move up.
+
+\textbf{Storage overhead is per-record, and records accumulate.}
+281\% overhead is nothing at 10,048 records and a real number at a
+billion. The tiered summarization mechanism in Section VI exists
+because a century of records from a city of agents cannot all be kept
+at full fidelity; what can be kept is every hash and the anchors that
+matter. That trade is designed here, not measured; we do not claim
+numbers for it.
+
+\section{Patentable Subject Matter}
+
+\emph{This section is an engineering disclosure of mechanisms the
+author believes to be novel and patentable. It is not a set of legal
+claims, and no legal conclusion should be drawn from its wording.}
+
+\begin{enumerate}
+\item \textbf{Consequence anchoring.} Binding an agent-action record,
+at record-creation time, to a digest of the physical sensor evidence
+observed in a defined window following the action, such that later
+verification recomputes the digest from the sensor record and detects
+any divergence between the claimed action history and the observed
+physical history.
+
+\item \textbf{Routine-context-bound authorization proofs.} Including
+in the action record a proof object derived from the principal's own
+longitudinal routine state (the activity and occupancy state the
+principal's environment independently shows at decision time), so that
+``the agent acted while the resident was asleep and away'' is
+establishable from the record itself rather than from the agent's
+self-report.
+
+\item \textbf{Tiered witness summarization for century-scale
+retention.} A retention method in which aging records are compacted
+into checkpoint summaries that preserve the full hash chain and the
+consequence anchors of safety-relevant records, while bulk context is
+summarized --- keeping an unbroken, verifiable chain at a storage cost
+that grows with the number of \emph{checkpoints} rather than the
+number of records.
+
+\item \textbf{Spec-only reimplementation as a longevity test.} A
+method for certifying a record format for long-term retention by
+requiring that an implementation produced solely from the written
+specification reproduce the reference verifier's verdicts on a corpus
+including adversarially modified records, with the agreement rate
+itself recorded as the format's longevity metric.
+
+\item \textbf{Dual-witness checkpoint countersigning.} Periodic
+checkpoints of the chain hash countersigned by a second, independent
+witness (another household system, an insurer, a public transparency
+log), closing the truncation blind spot of Section V by making the
+chain's length and head externally witnessed at intervals.
+\end{enumerate}
+
+\section{Related Work}
+
+Hash-chained audit logs are old and honorable: Haber and Stornetta's
+timestamping \cite{haber}, Schneier and Kelsey's forward-secure audit
+logs \cite{schneier}, and Certificate Transparency's append-only Merkle
+logs \cite{rfc6962} all protect records against later editing. The
+witness layer differs in what a record \emph{contains}: not a bare
+event, but an action bound to its authorizing context and to physical
+evidence sampled after the fact. W3C PROV \cite{prov} standardizes
+provenance vocabularies for data derivation; our concern is narrower
+and more physical --- provenance for \emph{acts in the world}, where
+the derivation that matters runs from a decision to a door. The CASAS
+project \cite{casas} supplies the recorded home; HouseRules
+\cite{hourules} supplies the decision stream and the gate whose
+outcomes form the context. Long-retention formats in the archival
+world (OAIS \cite{oais}) argue, as we do, that the representation
+information must be specified independently of any system; E4 is that
+argument run as an experiment.
+
+\section{Conclusion}
+
+In three hundred years, the agents will be unrecognizable and the
+homes will be unrecognizable, and someone will still be standing in a
+kitchen asking what happened here, and on whose say-so. The witness
+layer is our attempt to make sure the answer can be checked rather
+than merely told: a plain-text record that binds what was done, what
+allowed it, and what the world did next --- at 834 bytes a decision,
+verified by strangers, from a written page. Its measured strengths
+are consistency and survivability; its measured weaknesses ---
+anchoring that fades where the world is quiet, and a tail that needs
+an outside witness --- are printed in the same record it keeps of
+everything else. That is the point of a witness. It does not flatter.
+It stays.
+
+\begin{thebibliography}{9}
+\bibitem{casas} D. Cook, A. Crandall, B. Thomas, and N. Krishnan,
+``CASAS: A Smart Home in a Box,'' \emph{IEEE Computer}, vol. 46,
+no. 7, pp. 62--69, 2013. Dataset: CASAS Aruba, Zenodo record
+17180309, CC BY 4.0.
+
+\bibitem{hourules} T. Sirlapu, ``Before It Acts: Routine-Grounded
+Safety Gating for Autonomous Agents in Real Homes (HouseRules),''
+manuscript and open benchmark, 2026.
+
+\bibitem{haber} S. Haber and W. S. Stornetta, ``How to Time-Stamp a
+Digital Document,'' \emph{Journal of Cryptology}, vol. 3, no. 2,
+pp. 99--114, 1991.
+
+\bibitem{schneier} B. Schneier and J. Kelsey, ``Secure Audit Logs to
+Support Computer Forensics,'' \emph{ACM Transactions on Information
+and System Security}, vol. 2, no. 2, pp. 159--176, 1999.
+
+\bibitem{rfc6962} B. Laurie, A. Langley, and E. Kasper, ``Certificate
+Transparency,'' RFC 6962, IETF, 2013.
+
+\bibitem{prov} W3C, ``PROV-O: The PROV Ontology,'' W3C Recommendation,
+2013.
+
+\bibitem{oais} CCSDS, ``Reference Model for an Open Archival
+Information System (OAIS),'' ISO 14721:2012.
+\end{thebibliography}
+
+\end{document}
