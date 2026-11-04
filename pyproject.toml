@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "the-long-witness"
+version = "0.1.0"
+description = "A witness layer for delegated action: hash-chained records that bind an agent's action, its authorizing context, and the observed physical consequence."
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Tejaswini Sirlapu" }]
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]
